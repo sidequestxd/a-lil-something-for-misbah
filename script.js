@@ -6,6 +6,7 @@
  * - Word counter & clean live validation
  * - State transitions (loading, error alerts, success screen)
  * - Subtle animations and scroll cues
+ * - Gentle floating pink & white petals background
  */
 
 // Formspree configuration endpoint
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = document.getElementById("letter-form-section");
       if (target) {
         target.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Focus the message or name field after scroll
         setTimeout(() => {
           if (!anonCheckbox.checked) {
             nameInput.focus();
@@ -144,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (response.ok) {
-          // Success: reset form and reveal success stationery
           form.reset();
           if (anonCheckbox) anonCheckbox.checked = false;
           if (nameInput) {
@@ -157,21 +156,16 @@ document.addEventListener("DOMContentLoaded", () => {
           if (formContainer && successContainer) {
             formContainer.hidden = true;
             successContainer.hidden = false;
-
-            // Scroll so the success screen is nicely centered
             successContainer.scrollIntoView({ behavior: "smooth", block: "center" });
           }
         } else {
-          // Formspree API error
           let errorMessage = "Unable to send your letter right now. Please try again in a moment.";
           try {
             const data = await response.json();
             if (data && data.errors && data.errors.length > 0) {
               errorMessage = data.errors.map(err => err.message).join(", ");
             }
-          } catch (_) {
-            // fallback to default error message
-          }
+          } catch (_) {}
           showAlert(errorMessage, true);
         }
       } catch (networkError) {
@@ -221,4 +215,115 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   sections.forEach(sec => revealObserver.observe(sec));
+
+  // -------------------------------------------------------------------------
+  // 7. FLOATING PETALS ANIMATION (Subtle pink & white blossoms)
+  // -------------------------------------------------------------------------
+  const canvas = document.getElementById("petals-canvas");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Elegant shades of soft white, blush, rose quartz, and dusty petal
+    const petalColors = [
+      { fill: "rgba(255, 255, 255, 0.8)", stroke: "rgba(244, 221, 227, 0.65)" },
+      { fill: "rgba(255, 248, 250, 0.85)", stroke: "rgba(235, 195, 206, 0.6)" },
+      { fill: "rgba(244, 221, 227, 0.75)", stroke: "rgba(217, 167, 178, 0.65)" },
+      { fill: "rgba(249, 238, 240, 0.8)", stroke: "rgba(224, 178, 190, 0.55)" },
+      { fill: "rgba(235, 192, 205, 0.7)", stroke: "rgba(183, 131, 145, 0.55)" }
+    ];
+
+    // Petal count: light, airy & unhurried density
+    const totalPetals = window.innerWidth < 600 ? 11 : 18;
+    const petals = [];
+
+    class Petal {
+      constructor() {
+        this.reset(true);
+      }
+
+      reset(init = false) {
+        // Center-focused spawn distribution:
+        // Petals spawn primarily through the central reading area (20% to 80% of width)
+        const centerSpan = width * 0.65;
+        const centerLeft = (width - centerSpan) / 2;
+        this.x = centerLeft + Math.random() * centerSpan;
+        
+        this.y = init ? Math.random() * height : -25 - Math.random() * 45;
+        this.size = 10 + Math.random() * 8;
+        this.speedY = 0.5 + Math.random() * 0.55;
+        
+        // Perfectly symmetrical horizontal gentle sway centered around zero (no bias to left or right)
+        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.012;
+        this.swing = Math.random() * Math.PI * 2;
+        this.swingSpeed = 0.01 + Math.random() * 0.014;
+        this.swingAmplitude = 0.65 + Math.random() * 0.6;
+        this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+        this.opacity = 0.55 + Math.random() * 0.35;
+      }
+
+      update() {
+        this.swing += this.swingSpeed;
+        this.x += this.speedX + Math.sin(this.swing) * this.swingAmplitude;
+        this.y += this.speedY;
+        this.rotation += this.rotationSpeed;
+
+        if (this.y > height + 25 || this.x < -30 || this.x > width + 30) {
+          this.reset(false);
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.globalAlpha = this.opacity;
+
+        // Draw organic curved petal shape
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size / 2, this.size, 0, this.size * 1.3);
+        ctx.bezierCurveTo(this.size / 2, this.size, this.size / 2, -this.size / 2, 0, 0);
+        ctx.fillStyle = this.color.fill;
+        ctx.fill();
+
+        ctx.strokeStyle = this.color.stroke;
+        ctx.lineWidth = 0.75;
+        ctx.stroke();
+
+        // Delicate mid-rib crease for 3D realism
+        ctx.beginPath();
+        ctx.moveTo(0, this.size * 0.15);
+        ctx.lineTo(0, this.size * 1.05);
+        ctx.strokeStyle = this.color.stroke;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < totalPetals; i++) {
+      petals.push(new Petal());
+    }
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < petals.length; i++) {
+        petals[i].update();
+        petals[i].draw();
+      }
+      requestAnimationFrame(animatePetals);
+    }
+
+    animatePetals();
+  }
 });
