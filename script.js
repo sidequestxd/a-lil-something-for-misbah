@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = document.getElementById("letter-form-section");
       if (target) {
         target.scrollIntoView({ behavior: "smooth", block: "start" });
+
         setTimeout(() => {
           if (!anonCheckbox.checked) {
             nameInput.focus();
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
       }
     });
+
   }
 
   // 2. Anonymous Checkbox Toggle
@@ -61,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nameInput.placeholder = "Who is this little letter from?";
       }
     });
+
   }
 
   // 3. Word & Character Counter
@@ -143,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
 
+
         if (response.ok) {
           form.reset();
           if (anonCheckbox) anonCheckbox.checked = false;
@@ -157,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formContainer.hidden = true;
             successContainer.hidden = false;
             successContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+
           }
         } else {
           let errorMessage = "Unable to send your letter right now. Please try again in a moment.";
@@ -179,13 +184,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
+
   }
 
   // 5. Success screen action buttons
   if (returnTopBtn) {
     returnTopBtn.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
+
     });
+
   }
 
   if (writeAnotherBtn) {
@@ -195,8 +203,10 @@ document.addEventListener("DOMContentLoaded", () => {
         formContainer.hidden = false;
         messageInput.focus();
         formContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+
       }
     });
+
   }
 
   // 6. Editorial scroll reveal for sections
@@ -210,9 +220,11 @@ document.addEventListener("DOMContentLoaded", () => {
         revealObserver.unobserve(entry.target);
       }
     });
+
   }, {
     threshold: 0.12
   });
+
 
   sections.forEach(sec => revealObserver.observe(sec));
 
@@ -230,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     });
+
 
     // Delicate floral petal colors
     const petalColors = [
@@ -465,6 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.addEventListener("scroll", onScrollUpdate, { passive: true });
+
     // Initial paint setup
     onScrollUpdate();
   }

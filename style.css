@@ -993,7 +993,7 @@ body {
 #petals-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2; }
 
 /* --------------------------------------------------------------------------
-   FIXED BOTTOM BOTANICAL ARTWORK (Global Luxury Stationery Corners)
+   FIXED BOTTOM BOTANICAL ARTWORK (Gentle Dancing Lily with Breeze & Scroll)
    -------------------------------------------------------------------------- */
 .fixed-botanical {
   position: fixed;
@@ -1003,7 +1003,7 @@ body {
   width: 280px;
   max-width: 40vw;
   line-height: 0;
-  opacity: 0.55; /* Refined 45-65% luxury opacity */
+  opacity: 0.58;
   transition: opacity 0.3s ease;
   will-change: transform;
 }
@@ -1012,8 +1012,11 @@ body {
   width: 100%;
   height: auto;
   display: block;
-  mix-blend-mode: multiply; /* Seamless blending into warm ivory stationery */
+  mix-blend-mode: multiply;
   filter: contrast(1.04) saturate(0.95);
+  transform-origin: bottom left;
+  /* Organic gentle swaying "dancing" in the breeze */
+  animation: lilyBreezeDance 7.5s infinite ease-in-out;
 }
 
 .fixed-botanical-left {
@@ -1021,17 +1024,30 @@ body {
   transform-origin: bottom left;
 }
 
-.fixed-botanical-right {
-  right: 0;
-  transform-origin: bottom right;
-  transform: scaleX(-1); /* Naturally mirrors so flowers grow inward and upward from right corner */
+/* Dancing Animation Keyframes: Gentle tilt, breathing lift, and sway */
+@keyframes lilyBreezeDance {
+  0% {
+    transform: rotate(0deg) translateY(0px) scale(1);
+  }
+  25% {
+    transform: rotate(1.8deg) translateY(-4px) scale(1.012);
+  }
+  50% {
+    transform: rotate(-1.2deg) translateY(-2px) scale(1.006);
+  }
+  75% {
+    transform: rotate(2.2deg) translateY(-5px) scale(1.018);
+  }
+  100% {
+    transform: rotate(0deg) translateY(0px) scale(1);
+  }
 }
 
 @media (min-width: 1024px) {
   .fixed-botanical {
     width: 340px;
     max-width: 28vw;
-    opacity: 0.58;
+    opacity: 0.6;
   }
 }
 
@@ -1039,7 +1055,7 @@ body {
   .fixed-botanical {
     width: 210px;
     max-width: 38vw;
-    opacity: 0.48;
+    opacity: 0.52;
   }
 }
 
@@ -1047,7 +1063,7 @@ body {
   .fixed-botanical {
     width: 155px;
     max-width: 42vw;
-    opacity: 0.45;
+    opacity: 0.48;
     bottom: env(safe-area-inset-bottom, 0px);
   }
 }
