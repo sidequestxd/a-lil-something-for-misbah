@@ -1051,3 +1051,57 @@ body {
     bottom: env(safe-area-inset-bottom, 0px);
   }
 }
+
+/* --------------------------------------------------------------------------
+   TRAILING GREEN VINE VEIL (Opposite Side of Lily, All Way Top to Bottom)
+   -------------------------------------------------------------------------- */
+.green-vine-veil {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10; /* Placed in front, exactly like the lily artwork */
+  overflow: hidden;
+  opacity: 0.92;
+  filter: drop-shadow(-3px 6px 16px rgba(60, 84, 40, 0.12));
+  transition: opacity 0.3s ease;
+}
+
+.green-vine-track {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  will-change: transform;
+}
+
+.green-vine-svg {
+  width: 100%;
+  height: 135%; /* Extends beyond viewport for smooth continuous parallax scroll */
+  display: block;
+  transform-origin: top right;
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 1024px) {
+  .green-vine-veil {
+    width: 165px;
+    right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .green-vine-veil {
+    width: 105px;
+    opacity: 0.85;
+  }
+}
+
+@media (max-width: 480px) {
+  .green-vine-veil {
+    width: 80px;
+    opacity: 0.78;
+    right: -10px;
+  }
+}

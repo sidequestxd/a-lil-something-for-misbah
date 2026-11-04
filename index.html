@@ -19,19 +19,140 @@
   <!-- Ambient grain texture overlay -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
-    <!-- Fixed Bottom Corner Botanical Artwork (Global layout) -->
+      <!-- Botanical Elements: Lily on Left, Green Trailing Vine Veil on Right -->
   <div class="fixed-botanical fixed-botanical-left" aria-hidden="true">
     <picture>
       <source srcset="bottom-botanical.png" type="image/png">
       <img src="bottom-botanical.jpg" alt="" class="botanical-img">
     </picture>
   </div>
-  <div class="fixed-botanical fixed-botanical-right" aria-hidden="true">
-    <picture>
-      <source srcset="bottom-botanical.png" type="image/png">
-      <img src="bottom-botanical.jpg" alt="" class="botanical-img">
-    </picture>
-  </div>
+
+  <!-- Trailing Green Vine (All the way from top to bottom on the opposite side of lily) -->
+  <aside class="green-vine-veil" id="green-vine-veil" aria-hidden="true">
+    <div class="green-vine-track" id="green-vine-track">
+      <svg class="green-vine-svg" viewBox="0 0 140 1400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vineStem" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#4E6838" />
+            <stop offset="30%" stop-color="#608244" />
+            <stop offset="70%" stop-color="#4E6838" />
+            <stop offset="100%" stop-color="#3A5028" />
+          </linearGradient>
+          <linearGradient id="leafGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#88AA62" />
+            <stop offset="100%" stop-color="#557538" />
+          </linearGradient>
+          <linearGradient id="leafGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#9BC074" />
+            <stop offset="100%" stop-color="#628442" />
+          </linearGradient>
+          <linearGradient id="leafGrad3" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#46622E" />
+            <stop offset="100%" stop-color="#769C52" />
+          </linearGradient>
+        </defs>
+
+        <!-- Main Trailing Vine Stem curving down from top to bottom -->
+        <path d="M125 -10 C110 90, 85 180, 105 280 C125 380, 75 480, 95 600 C115 720, 80 820, 100 940 C120 1060, 70 1180, 90 1300 C105 1370, 115 1410, 120 1440" 
+              stroke="url(#vineStem)" stroke-width="2.6" stroke-linecap="round"/>
+
+        <!-- Secondary branching tendril stems -->
+        <path d="M110 140 C130 220, 125 290, 90 340" stroke="url(#vineStem)" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M85 450 C60 520, 68 590, 105 640" stroke="url(#vineStem)" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M102 780 C128 850, 120 910, 88 970" stroke="url(#vineStem)" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M82 1100 C58 1160, 65 1220, 100 1280" stroke="url(#vineStem)" stroke-width="1.3" stroke-linecap="round"/>
+
+        <!-- SECTION 1 (Top: 0 - 350px) -->
+        <path d="M112 40 C135 30, 140 10, 128 5 C116 0, 115 18, 124 20" stroke="#7A9C56" stroke-width="1.1" stroke-linecap="round"/>
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M115 50 C80 38, 48 48, 25 70 C48 72, 85 68, 115 50 Z" fill="url(#leafGrad1)"/>
+          <path d="M115 50 Q75 58, 27 70" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M110 85 C132 75, 148 65, 155 45 C148 68, 134 82, 110 85 Z" fill="url(#leafGrad2)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M100 130 C70 120, 42 135, 18 160 C38 162, 72 155, 100 130 Z" fill="url(#leafGrad3)"/>
+          <path d="M100 130 Q65 142, 20 160" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M103 160 C125 150, 142 162, 152 185 C138 180, 120 174, 103 160 Z" fill="url(#leafGrad1)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M92 210 C58 205, 32 225, 12 255 C35 252, 70 240, 92 210 Z" fill="url(#leafGrad2)"/>
+          <path d="M92 210 Q56 226, 14 254" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M98 240 C118 230, 136 242, 145 265 C132 258, 115 252, 98 240 Z" fill="url(#leafGrad1)"/>
+        </g>
+        <path d="M98 275 C75 295, 60 280, 65 268 C70 256, 85 264, 78 275" stroke="#7A9C56" stroke-width="1.1" stroke-linecap="round"/>
+
+        <!-- SECTION 2 (Mid-Upper: 350 - 700px) -->
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M112 320 C85 305, 50 318, 28 345 C50 348, 85 342, 112 320 Z" fill="url(#leafGrad1)"/>
+          <path d="M112 320 Q72 328, 30 344" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M116 350 C138 340, 152 355, 160 375 C146 370, 128 365, 116 350 Z" fill="url(#leafGrad3)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M95 410 C62 400, 35 418, 15 448 C40 445, 75 435, 95 410 Z" fill="url(#leafGrad2)"/>
+          <path d="M95 410 Q58 424, 18 447" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M90 440 C112 432, 128 445, 138 468 C124 460, 108 454, 90 440 Z" fill="url(#leafGrad1)"/>
+        </g>
+        <path d="M82 485 C55 495, 45 478, 52 468 C60 458, 72 472, 62 482" stroke="#7A9C56" stroke-width="1.1" stroke-linecap="round"/>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M85 530 C55 520, 28 538, 8 568 C32 565, 68 554, 85 530 Z" fill="url(#leafGrad1)"/>
+          <path d="M85 530 Q50 544, 10 567" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M92 560 C115 548, 132 560, 142 585 C128 578, 110 572, 92 560 Z" fill="url(#leafGrad3)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M102 630 C72 615, 42 628, 22 658 C45 660, 80 650, 102 630 Z" fill="url(#leafGrad2)"/>
+          <path d="M102 630 Q65 640, 25 657" stroke="#3D5426" stroke-width="0.6"/>
+        </g>
+
+        <!-- SECTION 3 (Mid-Lower: 700 - 1050px) -->
+        <path d="M110 690 C135 680, 145 660, 132 652 C120 645, 115 665, 126 672" stroke="#7A9C56" stroke-width="1.1" stroke-linecap="round"/>
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M108 740 C75 730, 48 745, 25 775 C50 772, 86 762, 108 740 Z" fill="url(#leafGrad1)"/>
+          <path d="M108 740 Q70 752, 28 774" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M105 770 C128 758, 145 772, 155 795 C140 788, 122 782, 105 770 Z" fill="url(#leafGrad2)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M92 830 C60 820, 32 838, 10 868 C35 865, 72 855, 92 830 Z" fill="url(#leafGrad3)"/>
+          <path d="M92 830 Q54 844, 12 867" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M96 860 C118 848, 135 862, 145 885 C130 878, 114 872, 96 860 Z" fill="url(#leafGrad1)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M98 920 C68 908, 38 924, 18 954 C42 954, 76 944, 98 920 Z" fill="url(#leafGrad2)"/>
+          <path d="M98 920 Q60 934, 20 953" stroke="#3D5426" stroke-width="0.6"/>
+        </g>
+
+        <!-- SECTION 4 (Bottom Base: 1050 - 1400px) -->
+        <path d="M108 995 C132 985, 142 968, 130 960 C118 952, 114 972, 124 978" stroke="#7A9C56" stroke-width="1.1" stroke-linecap="round"/>
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M112 1040 C80 1028, 50 1044, 28 1075 C52 1074, 88 1064, 112 1040 Z" fill="url(#leafGrad1)"/>
+          <path d="M112 1040 Q74 1054, 30 1074" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M110 1070 C132 1058, 148 1072, 156 1095 C142 1088, 125 1082, 110 1070 Z" fill="url(#leafGrad3)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M88 1140 C58 1128, 30 1145, 10 1175 C35 1172, 70 1162, 88 1140 Z" fill="url(#leafGrad2)"/>
+          <path d="M88 1140 Q52 1154, 12 1174" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M92 1170 C115 1158, 132 1170, 140 1195 C126 1188, 110 1182, 92 1170 Z" fill="url(#leafGrad1)"/>
+        </g>
+
+        <g stroke="#3D5426" stroke-width="0.75" stroke-linejoin="round">
+          <path d="M88 1240 C55 1228, 25 1245, 5 1275 C30 1272, 68 1262, 88 1240 Z" fill="url(#leafGrad1)"/>
+          <path d="M88 1240 Q48 1254, 8 1274" stroke="#3D5426" stroke-width="0.6"/>
+          <path d="M102 1270 C125 1258, 140 1272, 148 1295 C134 1288, 118 1282, 102 1270 Z" fill="url(#leafGrad3)"/>
+        </g>
+
+        <path d="M105 1330 C85 1320, 60 1334, 45 1355 C65 1354, 92 1345, 105 1330 Z" fill="url(#leafGrad2)" stroke="#3D5426" stroke-width="0.75"/>
+        <path d="M115 1370 C130 1360, 142 1372, 148 1390 C136 1385, 124 1380, 115 1370 Z" fill="url(#leafGrad1)" stroke="#3D5426" stroke-width="0.75"/>
+      </svg>
+    </div>
+  </aside>
+
 
   <main class="page-container">
 

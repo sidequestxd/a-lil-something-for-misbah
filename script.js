@@ -375,4 +375,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animatePetals();
   }
+
+  // -------------------------------------------------------------------------
+  // 8. GREEN VINE VEIL PARALLAX SCROLL ANIMATION
+  // -------------------------------------------------------------------------
+  const vineTrack = document.getElementById("green-vine-track");
+  if (vineTrack) {
+    let ticking = false;
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+          const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+          const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+
+          // Subtle organic parallax sway & translation as the user scrolls
+          // Translates up to -18% vertically to unveil lower clusters
+          // Adds a gentle sway wave on scroll
+          const translateY = -(progress * 18);
+          const swayRotate = Math.sin(progress * Math.PI * 3) * 1.5;
+          const swayX = Math.sin(progress * Math.PI * 2) * 5;
+
+          vineTrack.style.transform = `translate3d(${swayX}px, ${translateY}%, 0) rotate(${swayRotate}deg)`;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
 });
