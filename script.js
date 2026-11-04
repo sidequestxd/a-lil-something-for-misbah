@@ -413,31 +413,59 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -------------------------------------------------------------------------
-  // 8. ULTRA-SMOOTH GREEN VINE PARALLAX SCROLL (Lerped Physics)
+  // -------------------------------------------------------------------------
+  // 8. BUTTERY 60FPS PIXEL-INTERPOLATED VINE PARALLAX SCROLL
   // -------------------------------------------------------------------------
   const vineTrack = document.getElementById("green-vine-track");
   if (vineTrack) {
-    let currentScroll = 0;
-    let targetScroll = 0;
-    const ease = 0.085; // Silky smooth interpolation factor
+    let currentY = 0;
+    let targetY = 0;
+    let isTicking = false;
+    
+    // Pixel-based movement range:
+    // Moves across a generous 180px window for distinct, fluid travel
+    const maxTravelPixels = 180;
+    const ease = 0.055; // Silky fluid damping (smooth floating momentum)
 
-    function updateParallax() {
-      targetScroll = window.pageYOffset || document.documentElement.scrollTop;
-      currentScroll += (targetScroll - currentScroll) * ease;
+    function onScrollUpdate() {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(Math.max(scrollY / docHeight, 0), 1) : 0;
+      
+      targetY = progress * maxTravelPixels;
 
-      const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-      const progress = Math.min(Math.max(currentScroll / maxScroll, 0), 1);
-
-      // Smooth translation & subtle organic harmonic rotation
-      const translateY = -(progress * 15.5);
-      const swayRotate = Math.sin(progress * Math.PI * 2.5) * 1.2;
-      const swayX = Math.sin(progress * Math.PI * 2) * 3.5;
-
-      vineTrack.style.transform = `translate3d(${swayX.toFixed(2)}px, ${translateY.toFixed(2)}%, 0) rotate(${swayRotate.toFixed(2)}deg)`;
-
-      requestAnimationFrame(updateParallax);
+      if (!isTicking) {
+        isTicking = true;
+        requestAnimationFrame(renderParallax);
+      }
     }
 
-    requestAnimationFrame(updateParallax);
+    function renderParallax() {
+      const diff = targetY - currentY;
+      
+      // Update with smooth sub-pixel ease
+      currentY += diff * ease;
+
+      // Sub-pixel harmonic lateral sway and subtle breathing rotation
+      const progress = currentY / maxTravelPixels;
+      const swayX = Math.sin(progress * Math.PI * 2) * 6.5;
+      const swayRotate = Math.sin(progress * Math.PI * 2.5) * 1.4;
+
+      // translate3d in explicit sub-pixel precision for butter-smooth rendering
+      vineTrack.style.transform = `translate3d(${swayX.toFixed(3)}px, ${(-currentY).toFixed(3)}px, 0) rotate(${swayRotate.toFixed(3)}deg)`;
+
+      // Continue animating until settled within sub-pixel threshold
+      if (Math.abs(diff) > 0.08) {
+        requestAnimationFrame(renderParallax);
+      } else {
+        currentY = targetY;
+        vineTrack.style.transform = `translate3d(${swayX.toFixed(3)}px, ${(-targetY).toFixed(3)}px, 0) rotate(${swayRotate.toFixed(3)}deg)`;
+        isTicking = false;
+      }
+    }
+
+    window.addEventListener("scroll", onScrollUpdate, { passive: true });
+    // Initial paint setup
+    onScrollUpdate();
   }
 });
