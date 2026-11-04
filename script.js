@@ -268,6 +268,12 @@ document.addEventListener("DOMContentLoaded", () => {
         this.swingAmplitude = 0.65 + Math.random() * 0.6;
         this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
         this.opacity = 0.55 + Math.random() * 0.35;
+        // Variety of petal types for an organic mix:
+        // 0: Rose Petal (broad, teardrop, heart-notched top)
+        // 1: Sakura / Cherry Blossom (slender with notched tip)
+        // 2: Curved Falling Leaflet (tapered & elongated)
+        // 3: Soft Heart Petal (mini romantic silhouette)
+        this.type = Math.floor(Math.random() * 4);
       }
 
       update() {
@@ -287,25 +293,68 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.rotate(this.rotation);
         ctx.globalAlpha = this.opacity;
 
-        // Draw organic curved petal shape
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size / 2, this.size, 0, this.size * 1.3);
-        ctx.bezierCurveTo(this.size / 2, this.size, this.size / 2, -this.size / 2, 0, 0);
         ctx.fillStyle = this.color.fill;
-        ctx.fill();
-
         ctx.strokeStyle = this.color.stroke;
-        ctx.lineWidth = 0.75;
-        ctx.stroke();
+        ctx.lineWidth = 0.7;
 
-        // Delicate mid-rib crease for 3D realism
-        ctx.beginPath();
-        ctx.moveTo(0, this.size * 0.15);
-        ctx.lineTo(0, this.size * 1.05);
-        ctx.strokeStyle = this.color.stroke;
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
+        const s = this.size;
+
+        if (this.type === 0) {
+          // Type 0: Classic Wide Rose Petal (cupped with notched crown)
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-s * 0.7, s * 0.1, -s * 0.7, s * 0.9, -s * 0.2, s * 1.25);
+          ctx.quadraticCurveTo(0, s * 1.15, s * 0.2, s * 1.25);
+          ctx.bezierCurveTo(s * 0.7, s * 0.9, s * 0.7, s * 0.1, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+
+          // Delicate vein
+          ctx.beginPath();
+          ctx.moveTo(0, s * 0.15);
+          ctx.lineTo(0, s * 1.0);
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+
+        } else if (this.type === 1) {
+          // Type 1: Delicate Sakura / Cherry Blossom Petal (pointed base, distinct notched tip)
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-s * 0.5, s * 0.35, -s * 0.6, s * 0.9, -s * 0.15, s * 1.2);
+          ctx.lineTo(0, s * 1.08); // center notch
+          ctx.lineTo(s * 0.15, s * 1.2);
+          ctx.bezierCurveTo(s * 0.6, s * 0.9, s * 0.5, s * 0.35, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+
+        } else if (this.type === 2) {
+          // Type 2: Slender Curved Jasmine / Wildflower Petal (asymmetrical drift)
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-s * 0.35, s * 0.4, -s * 0.45, s * 0.85, -s * 0.05, s * 1.35);
+          ctx.bezierCurveTo(s * 0.35, s * 1.1, s * 0.4, s * 0.3, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+
+          // Subtle side curve vein
+          ctx.beginPath();
+          ctx.moveTo(0, s * 0.2);
+          ctx.quadraticCurveTo(-s * 0.05, s * 0.7, 0, s * 1.1);
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+
+        } else {
+          // Type 3: Romantic Mini Heart / Sweetheart Petal
+          const hs = s * 0.55;
+          ctx.beginPath();
+          ctx.moveTo(0, hs * 0.4);
+          ctx.bezierCurveTo(-hs * 0.1, 0, -hs * 0.9, 0, -hs * 0.9, hs * 0.7);
+          ctx.bezierCurveTo(-hs * 0.9, hs * 1.3, -hs * 0.3, hs * 1.7, 0, hs * 2.2);
+          ctx.bezierCurveTo(hs * 0.3, hs * 1.7, hs * 0.9, hs * 1.3, hs * 0.9, hs * 0.7);
+          ctx.bezierCurveTo(hs * 0.9, 0, hs * 0.1, 0, 0, hs * 0.4);
+          ctx.fill();
+          ctx.stroke();
+        }
 
         ctx.restore();
       }
