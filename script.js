@@ -217,7 +217,8 @@ document.addEventListener("DOMContentLoaded", () => {
   sections.forEach(sec => revealObserver.observe(sec));
 
   // -------------------------------------------------------------------------
-  // 7. FLOATING PETALS ANIMATION (Subtle pink & white blossoms)
+  // -------------------------------------------------------------------------
+  // 7. FLOATING PETALS & SAGE LEAFLETS ANIMATION
   // -------------------------------------------------------------------------
   const canvas = document.getElementById("petals-canvas");
   if (canvas) {
@@ -230,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
       height = canvas.height = window.innerHeight;
     });
 
-    // Elegant shades of soft white, blush, rose quartz, and dusty petal
+    // Delicate floral petal colors
     const petalColors = [
       { fill: "rgba(255, 255, 255, 0.8)", stroke: "rgba(244, 221, 227, 0.65)" },
       { fill: "rgba(255, 248, 250, 0.85)", stroke: "rgba(235, 195, 206, 0.6)" },
@@ -239,41 +240,51 @@ document.addEventListener("DOMContentLoaded", () => {
       { fill: "rgba(235, 192, 205, 0.7)", stroke: "rgba(183, 131, 145, 0.55)" }
     ];
 
-    // Petal count: light, airy & unhurried density
-    const totalPetals = window.innerWidth < 600 ? 11 : 18;
-    const petals = [];
+    // Elegant botanical leaf colors (Sage, olive & tender spring green)
+    const leafColors = [
+      { fill: "rgba(122, 156, 86, 0.75)", stroke: "rgba(68, 92, 44, 0.65)" },
+      { fill: "rgba(142, 174, 102, 0.78)", stroke: "rgba(78, 104, 52, 0.6)" },
+      { fill: "rgba(102, 134, 72, 0.72)", stroke: "rgba(55, 78, 36, 0.7)" },
+      { fill: "rgba(164, 192, 126, 0.75)", stroke: "rgba(88, 116, 62, 0.6)" }
+    ];
 
-    class Petal {
+    // Balanced density: total 20 items (mix of pink/white petals + green leaflets)
+    const totalItems = window.innerWidth < 600 ? 14 : 22;
+    const floatingElements = [];
+
+    class FloatingItem {
       constructor() {
         this.reset(true);
       }
 
       reset(init = false) {
-        // Center-focused spawn distribution:
-        // Petals spawn primarily through the central reading area (20% to 80% of width)
-        const centerSpan = width * 0.65;
+        const centerSpan = width * 0.7;
         const centerLeft = (width - centerSpan) / 2;
         this.x = centerLeft + Math.random() * centerSpan;
         
         this.y = init ? Math.random() * height : -25 - Math.random() * 45;
-        this.size = 10 + Math.random() * 8;
-        this.speedY = 0.5 + Math.random() * 0.55;
-        
-        // Perfectly symmetrical horizontal gentle sway centered around zero (no bias to left or right)
-        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.size = 9 + Math.random() * 8;
+        this.speedY = 0.45 + Math.random() * 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.28;
         this.rotation = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.012;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.014;
         this.swing = Math.random() * Math.PI * 2;
         this.swingSpeed = 0.01 + Math.random() * 0.014;
-        this.swingAmplitude = 0.65 + Math.random() * 0.6;
-        this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+        this.swingAmplitude = 0.65 + Math.random() * 0.55;
+        
+        // 70% Petals, 30% Green Leaflets for a meaningful botanical blend
+        this.isLeaf = Math.random() < 0.32;
+        
+        if (this.isLeaf) {
+          this.color = leafColors[Math.floor(Math.random() * leafColors.length)];
+          this.leafType = Math.floor(Math.random() * 2); // 0: single leaflet, 1: twin mini-leaf
+          this.size = 8 + Math.random() * 6; // small, delicate leaves
+        } else {
+          this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+          this.type = Math.floor(Math.random() * 4); // 4 petal shapes
+        }
+        
         this.opacity = 0.55 + Math.random() * 0.35;
-        // Variety of petal types for an organic mix:
-        // 0: Rose Petal (broad, teardrop, heart-notched top)
-        // 1: Sakura / Cherry Blossom (slender with notched tip)
-        // 2: Curved Falling Leaflet (tapered & elongated)
-        // 3: Soft Heart Petal (mini romantic silhouette)
-        this.type = Math.floor(Math.random() * 4);
       }
 
       update() {
@@ -295,114 +306,138 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ctx.fillStyle = this.color.fill;
         ctx.strokeStyle = this.color.stroke;
-        ctx.lineWidth = 0.7;
+        ctx.lineWidth = 0.65;
 
         const s = this.size;
 
-        if (this.type === 0) {
-          // Type 0: Classic Wide Rose Petal (cupped with notched crown)
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.bezierCurveTo(-s * 0.7, s * 0.1, -s * 0.7, s * 0.9, -s * 0.2, s * 1.25);
-          ctx.quadraticCurveTo(0, s * 1.15, s * 0.2, s * 1.25);
-          ctx.bezierCurveTo(s * 0.7, s * 0.9, s * 0.7, s * 0.1, 0, 0);
-          ctx.fill();
-          ctx.stroke();
+        if (this.isLeaf) {
+          if (this.leafType === 0) {
+            // Elegant single teardrop-elliptical green leaf with center vein
+            ctx.beginPath();
+            ctx.moveTo(0, -s * 0.85);
+            ctx.quadraticCurveTo(s * 0.42, 0, 0, s * 0.85);
+            ctx.quadraticCurveTo(-s * 0.42, 0, 0, -s * 0.85);
+            ctx.fill();
+            ctx.stroke();
 
-          // Delicate vein
-          ctx.beginPath();
-          ctx.moveTo(0, s * 0.15);
-          ctx.lineTo(0, s * 1.0);
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+            // Central vein line
+            ctx.beginPath();
+            ctx.moveTo(0, -s * 0.7);
+            ctx.lineTo(0, s * 0.7);
+            ctx.lineWidth = 0.45;
+            ctx.stroke();
+          } else {
+            // Twin mini-leaflet sprig
+            ctx.beginPath();
+            ctx.moveTo(-s * 0.1, -s * 0.7);
+            ctx.quadraticCurveTo(s * 0.35, -s * 0.2, -s * 0.05, s * 0.5);
+            ctx.quadraticCurveTo(-s * 0.35, -s * 0.2, -s * 0.1, -s * 0.7);
+            ctx.fill();
+            ctx.stroke();
 
-        } else if (this.type === 1) {
-          // Type 1: Delicate Sakura / Cherry Blossom Petal (pointed base, distinct notched tip)
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.bezierCurveTo(-s * 0.5, s * 0.35, -s * 0.6, s * 0.9, -s * 0.15, s * 1.2);
-          ctx.lineTo(0, s * 1.08); // center notch
-          ctx.lineTo(s * 0.15, s * 1.2);
-          ctx.bezierCurveTo(s * 0.6, s * 0.9, s * 0.5, s * 0.35, 0, 0);
-          ctx.fill();
-          ctx.stroke();
-
-        } else if (this.type === 2) {
-          // Type 2: Slender Curved Jasmine / Wildflower Petal (asymmetrical drift)
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.bezierCurveTo(-s * 0.35, s * 0.4, -s * 0.45, s * 0.85, -s * 0.05, s * 1.35);
-          ctx.bezierCurveTo(s * 0.35, s * 1.1, s * 0.4, s * 0.3, 0, 0);
-          ctx.fill();
-          ctx.stroke();
-
-          // Subtle side curve vein
-          ctx.beginPath();
-          ctx.moveTo(0, s * 0.2);
-          ctx.quadraticCurveTo(-s * 0.05, s * 0.7, 0, s * 1.1);
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-
+            // Small side leaf
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(s * 0.55, s * 0.2, s * 0.2, s * 0.65);
+            ctx.quadraticCurveTo(0, s * 0.4, 0, 0);
+            ctx.fill();
+            ctx.stroke();
+          }
         } else {
-          // Type 3: Romantic Mini Heart / Sweetheart Petal
-          const hs = s * 0.55;
-          ctx.beginPath();
-          ctx.moveTo(0, hs * 0.4);
-          ctx.bezierCurveTo(-hs * 0.1, 0, -hs * 0.9, 0, -hs * 0.9, hs * 0.7);
-          ctx.bezierCurveTo(-hs * 0.9, hs * 1.3, -hs * 0.3, hs * 1.7, 0, hs * 2.2);
-          ctx.bezierCurveTo(hs * 0.3, hs * 1.7, hs * 0.9, hs * 1.3, hs * 0.9, hs * 0.7);
-          ctx.bezierCurveTo(hs * 0.9, 0, hs * 0.1, 0, 0, hs * 0.4);
-          ctx.fill();
-          ctx.stroke();
+          // Petal shapes
+          if (this.type === 0) {
+            // Rose Petal
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-s * 0.7, s * 0.1, -s * 0.7, s * 0.9, -s * 0.2, s * 1.25);
+            ctx.quadraticCurveTo(0, s * 1.15, s * 0.2, s * 1.25);
+            ctx.bezierCurveTo(s * 0.7, s * 0.9, s * 0.7, s * 0.1, 0, 0);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, s * 0.15);
+            ctx.lineTo(0, s * 1.0);
+            ctx.lineWidth = 0.45;
+            ctx.stroke();
+          } else if (this.type === 1) {
+            // Sakura / Cherry Blossom Petal with notched tip
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-s * 0.5, s * 0.35, -s * 0.6, s * 0.9, -s * 0.15, s * 1.2);
+            ctx.lineTo(0, s * 1.08);
+            ctx.lineTo(s * 0.15, s * 1.2);
+            ctx.bezierCurveTo(s * 0.6, s * 0.9, s * 0.5, s * 0.35, 0, 0);
+            ctx.fill();
+            ctx.stroke();
+          } else if (this.type === 2) {
+            // Curved Wildflower Petal
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-s * 0.35, s * 0.4, -s * 0.45, s * 0.85, -s * 0.05, s * 1.35);
+            ctx.bezierCurveTo(s * 0.35, s * 1.1, s * 0.4, s * 0.3, 0, 0);
+            ctx.fill();
+            ctx.stroke();
+          } else {
+            // Sweetheart Petal
+            const hs = s * 0.55;
+            ctx.beginPath();
+            ctx.moveTo(0, hs * 0.4);
+            ctx.bezierCurveTo(-hs * 0.1, 0, -hs * 0.9, 0, -hs * 0.9, hs * 0.7);
+            ctx.bezierCurveTo(-hs * 0.9, hs * 1.3, -hs * 0.3, hs * 1.7, 0, hs * 2.2);
+            ctx.bezierCurveTo(hs * 0.3, hs * 1.7, hs * 0.9, hs * 1.3, hs * 0.9, hs * 0.7);
+            ctx.bezierCurveTo(hs * 0.9, 0, hs * 0.1, 0, 0, hs * 0.4);
+            ctx.fill();
+            ctx.stroke();
+          }
         }
 
         ctx.restore();
       }
     }
 
-    for (let i = 0; i < totalPetals; i++) {
-      petals.push(new Petal());
+    for (let i = 0; i < totalItems; i++) {
+      floatingElements.push(new FloatingItem());
     }
 
-    function animatePetals() {
+    function animateFloatingItems() {
       ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < petals.length; i++) {
-        petals[i].update();
-        petals[i].draw();
+      for (let i = 0; i < floatingElements.length; i++) {
+        floatingElements[i].update();
+        floatingElements[i].draw();
       }
-      requestAnimationFrame(animatePetals);
+      requestAnimationFrame(animateFloatingItems);
     }
 
-    animatePetals();
+    animateFloatingItems();
   }
 
   // -------------------------------------------------------------------------
-  // 8. GREEN VINE VEIL PARALLAX SCROLL ANIMATION
+  // 8. ULTRA-SMOOTH GREEN VINE PARALLAX SCROLL (Lerped Physics)
   // -------------------------------------------------------------------------
   const vineTrack = document.getElementById("green-vine-track");
   if (vineTrack) {
-    let ticking = false;
+    let currentScroll = 0;
+    let targetScroll = 0;
+    const ease = 0.085; // Silky smooth interpolation factor
 
-    window.addEventListener("scroll", () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-          const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-          const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+    function updateParallax() {
+      targetScroll = window.pageYOffset || document.documentElement.scrollTop;
+      currentScroll += (targetScroll - currentScroll) * ease;
 
-          // Subtle organic parallax sway & translation as the user scrolls
-          // Translates up to -18% vertically to unveil lower clusters
-          // Adds a gentle sway wave on scroll
-          const translateY = -(progress * 18);
-          const swayRotate = Math.sin(progress * Math.PI * 3) * 1.5;
-          const swayX = Math.sin(progress * Math.PI * 2) * 5;
+      const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+      const progress = Math.min(Math.max(currentScroll / maxScroll, 0), 1);
 
-          vineTrack.style.transform = `translate3d(${swayX}px, ${translateY}%, 0) rotate(${swayRotate}deg)`;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
+      // Smooth translation & subtle organic harmonic rotation
+      const translateY = -(progress * 15.5);
+      const swayRotate = Math.sin(progress * Math.PI * 2.5) * 1.2;
+      const swayX = Math.sin(progress * Math.PI * 2) * 3.5;
+
+      vineTrack.style.transform = `translate3d(${swayX.toFixed(2)}px, ${translateY.toFixed(2)}%, 0) rotate(${swayRotate.toFixed(2)}deg)`;
+
+      requestAnimationFrame(updateParallax);
+    }
+
+    requestAnimationFrame(updateParallax);
   }
-
 });
