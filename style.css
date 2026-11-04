@@ -97,24 +97,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Subtle botanical ambient SVGs */
-.botanical-bg {
-  position: fixed;
-  pointer-events: none;
-  z-index: 0;
-  max-width: 380px;
-  width: 55vw;
-}
 
-.botanical-top {
-  top: -40px;
-  left: -50px;
-}
-
-.botanical-bottom {
-  bottom: -40px;
-  right: -50px;
-}
 
 /* Main Container Layout */
 .page-container {
@@ -1004,5 +987,67 @@ body {
   .editorial-cta {
     width: 100%;
     padding: 0.95rem 1.4rem;
+  }
+}
+
+#petals-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2; }
+
+/* --------------------------------------------------------------------------
+   FIXED BOTTOM BOTANICAL ARTWORK (Global Luxury Stationery Corners)
+   -------------------------------------------------------------------------- */
+.fixed-botanical {
+  position: fixed;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+  width: 280px;
+  max-width: 40vw;
+  line-height: 0;
+  opacity: 0.55; /* Refined 45-65% luxury opacity */
+  transition: opacity 0.3s ease;
+  will-change: transform;
+}
+
+.fixed-botanical .botanical-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  mix-blend-mode: multiply; /* Seamless blending into warm ivory stationery */
+  filter: contrast(1.04) saturate(0.95);
+}
+
+.fixed-botanical-left {
+  left: 0;
+  transform-origin: bottom left;
+}
+
+.fixed-botanical-right {
+  right: 0;
+  transform-origin: bottom right;
+  transform: scaleX(-1); /* Naturally mirrors so flowers grow inward and upward from right corner */
+}
+
+@media (min-width: 1024px) {
+  .fixed-botanical {
+    width: 340px;
+    max-width: 28vw;
+    opacity: 0.58;
+  }
+}
+
+@media (max-width: 768px) {
+  .fixed-botanical {
+    width: 210px;
+    max-width: 38vw;
+    opacity: 0.48;
+  }
+}
+
+@media (max-width: 480px) {
+  .fixed-botanical {
+    width: 155px;
+    max-width: 42vw;
+    opacity: 0.45;
+    bottom: env(safe-area-inset-bottom, 0px);
   }
 }

@@ -6,6 +6,7 @@
  * - Word counter & clean live validation
  * - State transitions (loading, error alerts, success screen)
  * - Subtle animations and scroll cues
+ * - Gentle floating pink & white petals background
  */
 
 // Formspree configuration endpoint
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = document.getElementById("letter-form-section");
       if (target) {
         target.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Focus the message or name field after scroll
         setTimeout(() => {
           if (!anonCheckbox.checked) {
             nameInput.focus();
@@ -144,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (response.ok) {
-          // Success: reset form and reveal success stationery
           form.reset();
           if (anonCheckbox) anonCheckbox.checked = false;
           if (nameInput) {
@@ -157,21 +156,16 @@ document.addEventListener("DOMContentLoaded", () => {
           if (formContainer && successContainer) {
             formContainer.hidden = true;
             successContainer.hidden = false;
-
-            // Scroll so the success screen is nicely centered
             successContainer.scrollIntoView({ behavior: "smooth", block: "center" });
           }
         } else {
-          // Formspree API error
           let errorMessage = "Unable to send your letter right now. Please try again in a moment.";
           try {
             const data = await response.json();
             if (data && data.errors && data.errors.length > 0) {
               errorMessage = data.errors.map(err => err.message).join(", ");
             }
-          } catch (_) {
-            // fallback to default error message
-          }
+          } catch (_) {}
           showAlert(errorMessage, true);
         }
       } catch (networkError) {
@@ -221,4 +215,164 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   sections.forEach(sec => revealObserver.observe(sec));
+
+  // -------------------------------------------------------------------------
+  // 7. FLOATING PETALS ANIMATION (Subtle pink & white blossoms)
+  // -------------------------------------------------------------------------
+  const canvas = document.getElementById("petals-canvas");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Elegant shades of soft white, blush, rose quartz, and dusty petal
+    const petalColors = [
+      { fill: "rgba(255, 255, 255, 0.8)", stroke: "rgba(244, 221, 227, 0.65)" },
+      { fill: "rgba(255, 248, 250, 0.85)", stroke: "rgba(235, 195, 206, 0.6)" },
+      { fill: "rgba(244, 221, 227, 0.75)", stroke: "rgba(217, 167, 178, 0.65)" },
+      { fill: "rgba(249, 238, 240, 0.8)", stroke: "rgba(224, 178, 190, 0.55)" },
+      { fill: "rgba(235, 192, 205, 0.7)", stroke: "rgba(183, 131, 145, 0.55)" }
+    ];
+
+    // Petal count: light, airy & unhurried density
+    const totalPetals = window.innerWidth < 600 ? 11 : 18;
+    const petals = [];
+
+    class Petal {
+      constructor() {
+        this.reset(true);
+      }
+
+      reset(init = false) {
+        // Center-focused spawn distribution:
+        // Petals spawn primarily through the central reading area (20% to 80% of width)
+        const centerSpan = width * 0.65;
+        const centerLeft = (width - centerSpan) / 2;
+        this.x = centerLeft + Math.random() * centerSpan;
+        
+        this.y = init ? Math.random() * height : -25 - Math.random() * 45;
+        this.size = 10 + Math.random() * 8;
+        this.speedY = 0.5 + Math.random() * 0.55;
+        
+        // Perfectly symmetrical horizontal gentle sway centered around zero (no bias to left or right)
+        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.012;
+        this.swing = Math.random() * Math.PI * 2;
+        this.swingSpeed = 0.01 + Math.random() * 0.014;
+        this.swingAmplitude = 0.65 + Math.random() * 0.6;
+        this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+        this.opacity = 0.55 + Math.random() * 0.35;
+        // Variety of petal types for an organic mix:
+        // 0: Rose Petal (broad, teardrop, heart-notched top)
+        // 1: Sakura / Cherry Blossom (slender with notched tip)
+        // 2: Curved Falling Leaflet (tapered & elongated)
+        // 3: Soft Heart Petal (mini romantic silhouette)
+        this.type = Math.floor(Math.random() * 4);
+      }
+
+      update() {
+        this.swing += this.swingSpeed;
+        this.x += this.speedX + Math.sin(this.swing) * this.swingAmplitude;
+        this.y += this.speedY;
+        this.rotation += this.rotationSpeed;
+
+        if (this.y > height + 25 || this.x < -30 || this.x > width + 30) {
+          this.reset(false);
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.globalAlpha = this.opacity;
+
+        ctx.fillStyle = this.color.fill;
+        ctx.strokeStyle = this.color.stroke;
+        ctx.lineWidth = 0.7;
+
+        const s = this.size;
+
+        if (this.type === 0) {
+          // Type 0: Classic Wide Rose Petal (cupped with notched crown)
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-s * 0.7, s * 0.1, -s * 0.7, s * 0.9, -s * 0.2, s * 1.25);
+          ctx.quadraticCurveTo(0, s * 1.15, s * 0.2, s * 1.25);
+          ctx.bezierCurveTo(s * 0.7, s * 0.9, s * 0.7, s * 0.1, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+
+          // Delicate vein
+          ctx.beginPath();
+          ctx.moveTo(0, s * 0.15);
+          ctx.lineTo(0, s * 1.0);
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+
+        } else if (this.type === 1) {
+          // Type 1: Delicate Sakura / Cherry Blossom Petal (pointed base, distinct notched tip)
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-s * 0.5, s * 0.35, -s * 0.6, s * 0.9, -s * 0.15, s * 1.2);
+          ctx.lineTo(0, s * 1.08); // center notch
+          ctx.lineTo(s * 0.15, s * 1.2);
+          ctx.bezierCurveTo(s * 0.6, s * 0.9, s * 0.5, s * 0.35, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+
+        } else if (this.type === 2) {
+          // Type 2: Slender Curved Jasmine / Wildflower Petal (asymmetrical drift)
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-s * 0.35, s * 0.4, -s * 0.45, s * 0.85, -s * 0.05, s * 1.35);
+          ctx.bezierCurveTo(s * 0.35, s * 1.1, s * 0.4, s * 0.3, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+
+          // Subtle side curve vein
+          ctx.beginPath();
+          ctx.moveTo(0, s * 0.2);
+          ctx.quadraticCurveTo(-s * 0.05, s * 0.7, 0, s * 1.1);
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+
+        } else {
+          // Type 3: Romantic Mini Heart / Sweetheart Petal
+          const hs = s * 0.55;
+          ctx.beginPath();
+          ctx.moveTo(0, hs * 0.4);
+          ctx.bezierCurveTo(-hs * 0.1, 0, -hs * 0.9, 0, -hs * 0.9, hs * 0.7);
+          ctx.bezierCurveTo(-hs * 0.9, hs * 1.3, -hs * 0.3, hs * 1.7, 0, hs * 2.2);
+          ctx.bezierCurveTo(hs * 0.3, hs * 1.7, hs * 0.9, hs * 1.3, hs * 0.9, hs * 0.7);
+          ctx.bezierCurveTo(hs * 0.9, 0, hs * 0.1, 0, 0, hs * 0.4);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < totalPetals; i++) {
+      petals.push(new Petal());
+    }
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < petals.length; i++) {
+        petals[i].update();
+        petals[i].draw();
+      }
+      requestAnimationFrame(animatePetals);
+    }
+
+    animatePetals();
+  }
 });

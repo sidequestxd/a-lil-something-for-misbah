@@ -15,29 +15,22 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <canvas id="petals-canvas" aria-hidden="true"></canvas>
   <!-- Ambient grain texture overlay -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
-  <!-- Decorative floral corner graphics -->
-  <div class="botanical-bg botanical-top" aria-hidden="true">
-    <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M-40 40 C60 120, 180 80, 260 -30" stroke="#D9A7B2" stroke-width="1.2" stroke-linecap="round" opacity="0.45" />
-      <path d="M40 -40 C110 80, 70 200, -20 280" stroke="#B78391" stroke-width="1" stroke-linecap="round" opacity="0.35" />
-      <path d="M120 40 Q150 10 180 30 Q170 65 130 55 Z" fill="#F4DDE3" opacity="0.75" />
-      <path d="M90 100 Q140 120 120 160 Q80 145 85 105 Z" fill="#F9EEF0" opacity="0.9" stroke="#D9A7B2" stroke-width="0.8" />
-      <circle cx="160" cy="90" r="3.5" fill="#B78391" opacity="0.6" />
-      <circle cx="210" cy="50" r="2.5" fill="#D9A7B2" opacity="0.7" />
-    </svg>
+    <!-- Fixed Bottom Corner Botanical Artwork (Global layout) -->
+  <div class="fixed-botanical fixed-botanical-left" aria-hidden="true">
+    <picture>
+      <source srcset="bottom-botanical.png" type="image/png">
+      <img src="bottom-botanical.jpg" alt="" class="botanical-img">
+    </picture>
   </div>
-
-  <div class="botanical-bg botanical-bottom" aria-hidden="true">
-    <svg viewBox="0 0 450 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M480 320 C340 330, 260 210, 180 430" stroke="#D9A7B2" stroke-width="1.2" stroke-linecap="round" opacity="0.4" />
-      <path d="M360 480 C310 320, 190 280, 90 350" stroke="#B78391" stroke-width="1" stroke-linecap="round" opacity="0.35" />
-      <path d="M300 280 Q260 260 270 220 Q320 230 310 275 Z" fill="#F4DDE3" opacity="0.8" />
-      <path d="M220 340 Q180 320 195 285 Q235 300 230 335 Z" fill="#F9EEF0" opacity="0.9" stroke="#D9A7B2" stroke-width="0.8" />
-      <circle cx="240" cy="270" r="3" fill="#B78391" opacity="0.5" />
-    </svg>
+  <div class="fixed-botanical fixed-botanical-right" aria-hidden="true">
+    <picture>
+      <source srcset="bottom-botanical.png" type="image/png">
+      <img src="bottom-botanical.jpg" alt="" class="botanical-img">
+    </picture>
   </div>
 
   <main class="page-container">
